@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+
 import { fetchPostsPage } from '../../shared/api/posts'
 import { PAGE_SIZE } from './constants'
 

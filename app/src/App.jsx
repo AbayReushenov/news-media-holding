@@ -1,8 +1,8 @@
-import './App.css'
 import { Layout, Typography } from 'antd'
 import NewsFeed from './features/news/NewsFeed'
 import { t } from './shared/ui/i18n'
 import styles from './App.module.css'
+import './App.css'
 
 const { Header, Content } = Layout
 const { Title } = Typography

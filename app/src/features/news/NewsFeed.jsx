@@ -1,11 +1,13 @@
 import { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Card, Tag, Typography, Space, Row, Col, Spin, Alert, Button } from 'antd'
+
 import { fetchPosts, selectNews } from './newsSlice'
 import { useInfiniteScroll } from '../../shared/hooks/useInfiniteScroll'
 import { useStablePrependScroll } from '../../shared/hooks/useStablePrependScroll'
 import { PAGE_SIZE } from './constants'
 import { t } from '../../shared/ui/i18n'
+
 import styles from './NewsFeed.module.css'
 
 const { Paragraph, Text } = Typography
