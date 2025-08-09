@@ -6,18 +6,22 @@ import 'antd/dist/reset.css'
 import './index.css'
 import App from './App.jsx'
 
-// Ensure the page always starts at the top on reload and prevent browser scroll restoration
-if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
-  window.history.scrollRestoration = 'manual'
-}
-if (typeof window !== 'undefined') {
-  window.scrollTo(0, 0)
+// KISS: единообразная инициализация скролла
+if (typeof window !== 'undefined' && typeof window.history?.scrollRestoration !== 'undefined') {
+    window.history.scrollRestoration = 'manual'
+    window.scrollTo(0, 0)
 }
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </StrictMode>,
+const rootEl = document.getElementById('root')
+if (!rootEl) {
+    throw new Error('Root element #root not found')
+}
+
+createRoot(rootEl).render(
+    <StrictMode>
+        <Provider store={store}>
+            <App />
+        </Provider>
+    </StrictMode>
 )
+
