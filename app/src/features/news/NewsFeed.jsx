@@ -6,12 +6,13 @@ import { useInfiniteScroll } from '../../shared/hooks/useInfiniteScroll'
 import { useStablePrependScroll } from '../../shared/hooks/useStablePrependScroll'
 import { PAGE_SIZE } from './constants'
 import { t } from '../../shared/ui/i18n'
+import styles from './NewsFeed.module.css'
 
 const { Paragraph, Text } = Typography
 
 function truncate(text, maxLines = 3) {
     return (
-        <Paragraph ellipsis={{ rows: maxLines, expandable: false }} className='paragraphTight'>
+        <Paragraph ellipsis={{ rows: maxLines, expandable: false }} className={styles.paragraphTight}>
             {text}
         </Paragraph>
     )
@@ -57,7 +58,7 @@ export default function NewsFeed() {
     const isInitialLoading = items.length === 0 && isLoading
 
     return (
-        <Space direction='vertical' size='large' className='newsFeedRoot'>
+        <Space direction='vertical' size='large' className={styles.newsFeedRoot}>
             {error && (
                 <Alert
                     type='error'
@@ -73,14 +74,14 @@ export default function NewsFeed() {
             )}
 
             {isInitialLoading && (
-                <div className='centerPad32'>
+                <div className={styles.centerPad32}>
                     <Spin />
                 </div>
             )}
 
             <div ref={topSentinelRef} />
             {/* Padding top compensates Row's negative top margin from vertical gutter (16 -> 8px) */}
-            <div className='paddingTop8'>
+            <div className={styles.paddingTop8}>
                 <Row gutter={[16, 16]}>
                     {items.map((post) => (
                         <Col xs={24} md={12} key={post.id}>
@@ -93,7 +94,7 @@ export default function NewsFeed() {
                                     role='article'
                                 >
                                     {truncate(post.body)}
-                                    <Space wrap className='mt12'>
+                                    <Space wrap className={styles.mt12}>
                                         {post.tags?.map((t) => (
                                             <Tag key={t}>{t}</Tag>
                                         ))}
@@ -111,7 +112,7 @@ export default function NewsFeed() {
             </div>
 
             {items.length > 0 && (isLoading || hasMore) && (
-                <div ref={bottomSentinelRef} className='centerPad24'>
+                <div ref={bottomSentinelRef} className={styles.centerPad24}>
                     {isLoading ? <Spin /> : <Text type='secondary'>{t('news.loadMore')}</Text>}
                 </div>
             )}

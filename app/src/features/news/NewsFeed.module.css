@@ -1,0 +1,27 @@
+.newsFeedRoot {
+  width: 100%;
+}
+
+.centerPad32 {
+  display: flex;
+  justify-content: center;
+  padding: 32px;
+}
+
+.paddingTop8 {
+  padding-top: 8px;
+}
+
+.mt12 {
+  margin-top: 12px;
+}
+
+.centerPad24 {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+}
+
+.paragraphTight {
+  margin-bottom: 0;
+}
