@@ -1,25 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-
-const PAGE_SIZE = 10
+import { fetchPostsPage, PAGE_SIZE } from '../../shared/api/posts'
 
 export const fetchPosts = createAsyncThunk(
   'news/fetchPosts',
   async ({ skip }, { rejectWithValue }) => {
     try {
-      const response = await fetch(`https://dummyjson.com/posts?limit=${PAGE_SIZE}&skip=${skip}&sortBy=id&order=asc`)
-      if (!response.ok) {
-        throw new Error(`Request failed: ${response.status}`)
-      }
-      const data = await response.json()
-      // Ensure deterministic ascending order by id
-      const sortedPosts = (data.posts ?? []).slice().sort((a, b) => a.id - b.id)
-      return {
-        posts: sortedPosts,
-        total: data.total ?? 0,
-        skip: data.skip ?? skip,
-      }
+      return await fetchPostsPage({ skip, limit: PAGE_SIZE })
     } catch (error) {
-      return rejectWithValue(error.message || 'Unknown error')
+      return rejectWithValue(error?.message || 'Unknown error')
     }
   }
 )
@@ -33,7 +21,6 @@ const initialState = {
   error: null,
   hasMore: true,
   firstPageRequested: false,
-  reachedTop: true, // we start at the top-most page
   lastChange: null, // 'prepend' | 'append' | null
 }
 
@@ -54,24 +41,19 @@ const newsSlice = createSlice({
       })
       .addCase(fetchPosts.fulfilled, (state, action) => {
         const { posts, total, skip } = action.payload
-        // Deduplicate by id while preserving order
         const existingIds = new Set(state.items.map((p) => p.id))
         const newUniquePosts = posts.filter((p) => !existingIds.has(p.id))
 
         if (state.items.length === 0) {
           state.items = newUniquePosts
-          state.minSkip = skip // should be 0 on first page
+          state.minSkip = skip
           state.skip = skip + PAGE_SIZE
-          state.reachedTop = skip === 0
           state.lastChange = null
         } else if (skip < state.minSkip) {
-          // Prepend earlier page
           state.items = [...newUniquePosts, ...state.items]
           state.minSkip = Math.min(state.minSkip, skip)
-          state.reachedTop = skip === 0
           state.lastChange = 'prepend'
         } else {
-          // Append next page
           state.items = [...state.items, ...newUniquePosts]
           state.skip = Math.max(state.skip, skip + PAGE_SIZE)
           state.lastChange = 'append'
