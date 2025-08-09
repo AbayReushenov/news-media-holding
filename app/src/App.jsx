@@ -8,24 +8,13 @@ const { Title } = Typography
 
 function App() {
   return (
-      <Layout style={{ minHeight: '100vh' }}>
-          <Header
-              style={{
-                  background: '#fff',
-                  position: 'sticky',
-                  top: 0,
-                  zIndex: 1000,
-                  height: 64,
-                  display: 'flex',
-                  alignItems: 'center',
-                  boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
-              }}
-          >
-              <Title level={3} style={{ margin: 0 }}>
+      <Layout className='layoutRoot'>
+          <Header className='headerRoot'>
+              <Title level={3} className='headerTitle'>
                   {t('app.title')}
               </Title>
           </Header>
-          <Content style={{ padding: '88px 24px 24px', maxWidth: 1200, margin: '0 auto', width: '100%' }}>
+          <Content className='contentRoot'>
               <NewsFeed />
           </Content>
       </Layout>

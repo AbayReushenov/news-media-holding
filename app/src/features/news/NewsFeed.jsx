@@ -11,7 +11,7 @@ const { Paragraph, Text } = Typography
 
 function truncate(text, maxLines = 3) {
     return (
-        <Paragraph ellipsis={{ rows: maxLines, expandable: false }} style={{ marginBottom: 0 }}>
+        <Paragraph ellipsis={{ rows: maxLines, expandable: false }} className='paragraphTight'>
             {text}
         </Paragraph>
     )
@@ -57,7 +57,7 @@ export default function NewsFeed() {
     const isInitialLoading = items.length === 0 && isLoading
 
     return (
-        <Space direction='vertical' size='large' style={{ width: '100%' }}>
+        <Space direction='vertical' size='large' className='newsFeedRoot'>
             {error && (
                 <Alert
                     type='error'
@@ -73,14 +73,14 @@ export default function NewsFeed() {
             )}
 
             {isInitialLoading && (
-                <div style={{ display: 'flex', justifyContent: 'center', padding: 32 }}>
+                <div className='centerPad32'>
                     <Spin />
                 </div>
             )}
 
             <div ref={topSentinelRef} />
             {/* Padding top compensates Row's negative top margin from vertical gutter (16 -> 8px) */}
-            <div style={{ paddingTop: 8 }}>
+            <div className='paddingTop8'>
                 <Row gutter={[16, 16]}>
                     {items.map((post) => (
                         <Col xs={24} md={12} key={post.id}>
@@ -93,7 +93,7 @@ export default function NewsFeed() {
                                     role='article'
                                 >
                                     {truncate(post.body)}
-                                    <Space wrap style={{ marginTop: 12 }}>
+                                    <Space wrap className='mt12'>
                                         {post.tags?.map((t) => (
                                             <Tag key={t}>{t}</Tag>
                                         ))}
@@ -111,7 +111,7 @@ export default function NewsFeed() {
             </div>
 
             {items.length > 0 && (isLoading || hasMore) && (
-                <div ref={bottomSentinelRef} style={{ display: 'flex', justifyContent: 'center', padding: 24 }}>
+                <div ref={bottomSentinelRef} className='centerPad24'>
                     {isLoading ? <Spin /> : <Text type='secondary'>{t('news.loadMore')}</Text>}
                 </div>
             )}
