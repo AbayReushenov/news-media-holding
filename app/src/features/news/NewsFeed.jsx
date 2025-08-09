@@ -138,7 +138,7 @@ export default function NewsFeed() {
                   {items.map((post) => (
                       <Col xs={24} md={12} key={post.id}>
                           <div data-post-id={post.id}>
-                              <Card title={`${post.id} ${post.title}`} bordered hoverable>
+                              <Card title={post.title} variant='outlined' hoverable>
                                   {truncate(post.body)}
                                   <Space wrap style={{ marginTop: 12 }}>
                                       {post.tags?.map((t) => (
