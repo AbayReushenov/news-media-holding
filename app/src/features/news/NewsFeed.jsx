@@ -4,6 +4,8 @@ import { Card, Tag, Typography, Space, Row, Col, Spin, Alert, Button } from 'ant
 import { fetchPosts, selectNews } from './newsSlice'
 import { useInfiniteScroll } from '../../shared/hooks/useInfiniteScroll'
 import { useStablePrependScroll } from '../../shared/hooks/useStablePrependScroll'
+import { PAGE_SIZE } from './constants'
+import { t } from '../../shared/ui/i18n'
 
 const { Paragraph, Text } = Typography
 
@@ -46,7 +48,7 @@ export default function NewsFeed() {
         isLoading,
         skip,
         minSkip,
-        pageSize: 10,
+        pageSize: PAGE_SIZE,
         onLoadNext,
         onLoadPrev,
         onBeforePrepend: captureFirstVisible,
@@ -59,11 +61,11 @@ export default function NewsFeed() {
             {error && (
                 <Alert
                     type='error'
-                    message='Не удалось загрузить новости'
+                    message={t('news.error.title')}
                     description={error}
                     action={
                         <Button onClick={() => dispatch(fetchPosts({ skip: items.length === 0 ? 0 : minSkip }))}>
-                            Повторить
+                            {t('news.error.retry')}
                         </Button>
                     }
                     role='alert'
@@ -96,7 +98,9 @@ export default function NewsFeed() {
                                             <Tag key={t}>{t}</Tag>
                                         ))}
                                         <Text type='secondary'>
-                                            Реакции: {post.reactions?.likes ?? post.reactions ?? 0}
+                                            {t('news.reactions', {
+                                                count: post.reactions?.likes ?? post.reactions ?? 0,
+                                            })}
                                         </Text>
                                     </Space>
                                 </Card>
@@ -108,7 +112,7 @@ export default function NewsFeed() {
 
             {items.length > 0 && (isLoading || hasMore) && (
                 <div ref={bottomSentinelRef} style={{ display: 'flex', justifyContent: 'center', padding: 24 }}>
-                    {isLoading ? <Spin /> : <Text type='secondary'>Прокрутите ниже, чтобы загрузить больше…</Text>}
+                    {isLoading ? <Spin /> : <Text type='secondary'>{t('news.loadMore')}</Text>}
                 </div>
             )}
         </Space>

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { fetchPostsPage, PAGE_SIZE } from '../../shared/api/posts'
+import { fetchPostsPage } from '../../shared/api/posts'
+import { PAGE_SIZE } from './constants'
 
 export const fetchPosts = createAsyncThunk(
   'news/fetchPosts',

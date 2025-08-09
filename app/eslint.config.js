@@ -19,8 +19,13 @@ export default defineConfig([
             },
         },
         rules: {
-            'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
-        },
+        'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+          // Warn on hardcoded Cyrillic text literals to promote i18n usage
+      'no-hardcoded-cyrillic/no-hardcoded-cyrillic': 'warn',
+    },
+    plugins: {
+      'no-hardcoded-cyrillic': (await import('./eslint-rules/no-hardcoded-cyrillic.js')).default,
+    },
     },
     {
         files: ['vite.config.js', 'eslint.config.js'],

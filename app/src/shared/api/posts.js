@@ -1,7 +1,6 @@
 import { retry } from '../lib/retry'
-
-export const PAGE_SIZE = 10
-const BASE_URL = 'https://dummyjson.com'
+import { API_BASE_URL } from './constants'
+import { PAGE_SIZE } from '../../features/news/constants'
 
 function parseError(e) {
   if (e?.message) return e.message
@@ -14,7 +13,7 @@ function parseError(e) {
 
 export async function fetchPostsPage({ skip, limit = PAGE_SIZE }) {
   return retry(async () => {
-    const url = `${BASE_URL}/posts?limit=${limit}&skip=${skip}&sortBy=id&order=asc`
+    const url = `${API_BASE_URL}/posts?limit=${limit}&skip=${skip}&sortBy=id&order=asc`
     const res = await fetch(url)
     if (!res.ok) {
       throw new Error(`Request failed: ${res.status}`)

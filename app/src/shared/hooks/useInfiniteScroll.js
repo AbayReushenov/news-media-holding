@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react'
+import { INFINITE_SCROLL_BOTTOM_MARGIN_PX, INFINITE_SCROLL_TOP_MARGIN_PX } from '../../features/news/constants'
 
 export function useInfiniteScroll({
   hasMore,
@@ -9,8 +10,8 @@ export function useInfiniteScroll({
   onLoadNext,
   onLoadPrev,
   onBeforePrepend,
-  rootMarginBottom = '400px',
-  rootMarginTop = '64px',
+  rootMarginBottom = `${INFINITE_SCROLL_BOTTOM_MARGIN_PX}px`,
+  rootMarginTop = `${INFINITE_SCROLL_TOP_MARGIN_PX}px`,
 }) {
   const bottomRef = useRef(null)
   const topRef = useRef(null)
