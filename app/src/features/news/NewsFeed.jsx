@@ -66,14 +66,8 @@ export default function NewsFeed() {
       new IntersectionObserver(
         (entries) => {
           const first = entries[0]
-          const viewportNotFilled = document.documentElement.scrollHeight <= window.innerHeight + 100
-          if (
-            first.isIntersecting &&
-            !isFetchingRef.current &&
-            hasMore &&
-            (hasUserScrolledRef.current || viewportNotFilled)
-          ) {
-            dispatch(fetchPosts({ skip }))
+          if (first.isIntersecting && !isFetchingRef.current && hasMore) {
+              dispatch(fetchPosts({ skip }))
           }
         },
         { rootMargin: '0px 0px 400px 0px', threshold: 0 }
@@ -128,42 +122,44 @@ export default function NewsFeed() {
   }, [items.length, lastChange])
 
   return (
-    <Space direction="vertical" size="large" style={{ width: '100%' }}>
-      {error && <Alert type="error" message="Не удалось загрузить новости" description={error} />}
+      <Space direction='vertical' size='large' style={{ width: '100%' }}>
+          {error && <Alert type='error' message='Не удалось загрузить новости' description={error} />}
 
-      {isInitialLoading && (
-        <div style={{ display: 'flex', justifyContent: 'center', padding: 32 }}>
-          <Spin />
-        </div>
-      )}
-
-      <div ref={topSentinelRef} />
-      {/* Padding top compensates Row's negative top margin from vertical gutter (16 -> 8px) */}
-      <div style={{ paddingTop: 8 }}>
-        <Row gutter={[16, 16]}>
-          {items.map((post) => (
-            <Col xs={24} md={12} key={post.id}>
-              <div data-post-id={post.id}>
-                <Card title={`${post.id}. ${post.title}`} variant hoverable>
-                  {truncate(post.body)}
-                  <Space wrap style={{ marginTop: 12 }}>
-                    {post.tags?.map((t) => (
-                      <Tag key={t}>{t}</Tag>
-                    ))}
-                    <Text type="secondary">Реакции: {post.reactions?.likes ?? post.reactions ?? 0}</Text>
-                  </Space>
-                </Card>
+          {isInitialLoading && (
+              <div style={{ display: 'flex', justifyContent: 'center', padding: 32 }}>
+                  <Spin />
               </div>
-            </Col>
-          ))}
-        </Row>
-      </div>
+          )}
 
-      {items.length > 0 && (isLoading || hasMore) && (
-        <div ref={bottomSentinelRef} style={{ display: 'flex', justifyContent: 'center', padding: 24 }}>
-          {isLoading ? <Spin /> : <Text type="secondary">Прокрутите ниже, чтобы загрузить больше…</Text>}
-        </div>
-      )}
-    </Space>
+          <div ref={topSentinelRef} />
+          {/* Padding top compensates Row's negative top margin from vertical gutter (16 -> 8px) */}
+          <div style={{ paddingTop: 8 }}>
+              <Row gutter={[16, 16]}>
+                  {items.map((post) => (
+                      <Col xs={24} md={12} key={post.id}>
+                          <div data-post-id={post.id}>
+                              <Card title={`${post.id} ${post.title}`} bordered hoverable>
+                                  {truncate(post.body)}
+                                  <Space wrap style={{ marginTop: 12 }}>
+                                      {post.tags?.map((t) => (
+                                          <Tag key={t}>{t}</Tag>
+                                      ))}
+                                      <Text type='secondary'>
+                                          Реакции: {post.reactions?.likes ?? post.reactions ?? 0}
+                                      </Text>
+                                  </Space>
+                              </Card>
+                          </div>
+                      </Col>
+                  ))}
+              </Row>
+          </div>
+
+          {items.length > 0 && (isLoading || hasMore) && (
+              <div ref={bottomSentinelRef} style={{ display: 'flex', justifyContent: 'center', padding: 24 }}>
+                  {isLoading ? <Spin /> : <Text type='secondary'>Прокрутите ниже, чтобы загрузить больше…</Text>}
+              </div>
+          )}
+      </Space>
   )
 }
