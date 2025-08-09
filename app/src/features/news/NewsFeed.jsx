@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Card, Tag, Typography, Space, Row, Col, Spin, Alert, Button } from 'antd'
 import { fetchPosts, selectNews } from './newsSlice'
@@ -19,9 +19,14 @@ export default function NewsFeed() {
     const dispatch = useDispatch()
     const { items, skip, isLoading, error, hasMore, firstPageRequested, minSkip, lastChange } = useSelector(selectNews)
 
-    // UI remains the same; scroll tracking больше не нужен
+    // Initial load (guarded)
+    useEffect(() => {
+        if (!firstPageRequested && items.length === 0) {
+            dispatch(fetchPosts({ skip: 0 }))
+        }
+    }, [dispatch, items.length, firstPageRequested])
 
-    // Перенесено в hook useInfiniteScroll
+    // Перенесено в hook useStablePrependScroll
     const { getItemRef, captureFirstVisible } = useStablePrependScroll({ items, lastChange })
 
     const onLoadNext = useCallback(
@@ -47,23 +52,7 @@ export default function NewsFeed() {
         onBeforePrepend: captureFirstVisible,
     })
 
-    // Наблюдение инкапсулировано в useInfiniteScroll
-
     const isInitialLoading = items.length === 0 && isLoading
-
-    // After a prepend, keep the previously first visible card at the same screen offset
-    useEffect(() => {
-        if (lastChange !== 'prepend') return
-        const prevId = prePrependVisibleIdRef.current
-        if (!prevId) return
-        const target = document.querySelector(`[data-post-id="${prevId}"]`)
-        if (!target) return
-        const rect = target.getBoundingClientRect()
-        const delta = rect.top - prePrependOffsetRef.current
-        if (Math.abs(delta) > 1) {
-            window.scrollBy({ top: delta })
-        }
-    }, [items.length, lastChange])
 
     return (
         <Space direction='vertical' size='large' style={{ width: '100%' }}>
