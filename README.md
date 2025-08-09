@@ -14,7 +14,6 @@
 - Ant Design 5
 
 ## Материалы
-- Видео-презентация: `news-media-holding-video.mp4` (в корне репозитория)
 - Презентация: `news-media-holding.png` (в корне репозитория)
 - Деплой: https://abayreushenov.github.io/news-media-holding/
 
